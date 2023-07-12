@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+    #container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .question {
+      margin-bottom: 20px;
+    }
+    
+    .question-text {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    .answers {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .answer {
+      margin: 5px;
+      padding: 10px;
+      background-color: #f0f0f0;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .answer.correct {
+      background-color: #8BC34A;
+    }
+    
+    .answer.incorrect {
+      background-color: #FF5722;
+    }
+    
+    #result {
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>Тест на знание электронных устройств</h1>
+    <div id="question-container"></div>
+    <div id="result"></div>
+  </div>
+
+  <script>
+var questions = [
+  {
+    question: "Какой тип заправки у устройства geekvape aegis nano?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько mAh у устройства geekvape aegis nano?",
+    answers: ["800", "30", "сверху на излом"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства geekvape aegis nano?",
+    answers: ["800", "30", "сверху на излом"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства geekvape aegis boost LE?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 1
+  },
+  {
+    question: "Сколько mAh у устройства geekvape aegis boost LE?",
+    answers: ["1500", "40", "сверху"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства geekvape aegis boost LE?",
+    answers: ["1500", "40", "сверху"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства geekvape aegis hero?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 1
+  },
+  {
+    question: "Сколько mAh у устройства geekvape aegis hero?",
+    answers: ["1200", "45", "сверху"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства geekvape aegis hero?",
+    answers: ["1200", "45", "сверху"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства geekvape obelisk 65?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 1
+  },
+  {
+    question: "Сколько mAh у устройства geekvape obelisk 65?",
+    answers: ["2500", "60", "сверху"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства geekvape obelisk 65?",
+    answers: ["2500", "65", "сверху"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства smoant battlestar/charon baby/mysterybox?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства smoant battlestar/charon baby/mysterybox?",
+    answers: ["750", "15", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства smoant battlestar/charon baby/mysterybox?",
+    answers: ["750", "15", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства smoant veer?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства smoant veer?",
+    answers: ["750", "15", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства smoant veer?",
+    answers: ["750", "15", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства smoant charon baby+?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства smoant charon baby+?",
+    answers: ["1000", "35", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства smoant charon baby+?",
+    answers: ["1000", "35", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства smoant santi?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства smoant santi?",
+    answers: ["1100", "40", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства smoant santi?",
+    answers: ["1100", "40", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства smoant knight 40?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства smoant knight 40?",
+    answers: ["1500", "40", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства smoant knight 40?",
+    answers: ["1500", "40", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства smoant knight 80?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства smoant knight 80?",
+    answers: ["акб 18650", "80", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства smoant knight 80?",
+    answers: ["акб 18650", "80", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства smoant pasito 2?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства smoant pasito 2?",
+    answers: ["2500", "80", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства smoant pasito 2?",
+    answers: ["2500", "80", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства voopoo drag nano 2?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько mAh у устройства voopoo drag nano 2?",
+    answers: ["800", "20", "сверху на излом"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства voopoo drag nano 2?",
+    answers: ["800", "20", "сверху на излом"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства voopoo vinci pod kit?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства voopoo vinci pod kit?",
+    answers: ["800", "15", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства voopoo vinci pod kit?",
+    answers: ["800", "15", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства voopoo vinci Q pod?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько mAh у устройства voopoo vinci Q pod?",
+    answers: ["900", "15", "сверху на излом"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства voopoo vinci Q pod?",
+    answers: ["900", "15", "сверху на излом"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства voopoo v.thru?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства voopoo v.thru?",
+    answers: ["900", "25", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства voopoo v.thru?",
+    answers: ["900", "25", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства voopoo v.mate?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства voopoo v.mate?",
+    answers: ["900", "17", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства voopoo v.mate?",
+    answers: ["900", "17", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства voopoo drag x?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 3
+  },
+  {
+    question: "Сколько mAh у устройства voopoo drag x?",
+    answers: ["акб 18650", "80", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства voopoo drag x?",
+    answers: ["акб 18650", "80", "нижняя"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства voopoo drag s?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства voopoo drag s?",
+    answers: ["2500", "60", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства voopoo drag s?",
+    answers: ["2500", "60", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства voopoo drag x plus?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 3
+  },
+  {
+    question: "Сколько mAh у устройства voopoo drag x plus?",
+    answers: ["акб 18650 или 21700", "100", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства voopoo drag x plus?",
+    answers: ["акб 18650 или 21700", "100", "нижняя"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства smok novo 2?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства smok novo 2?",
+    answers: ["800", "25", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства smok novo 2?",
+    answers: ["800", "25", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства smok novo x?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства smok novo x?",
+    answers: ["800", "25", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства smok novo x?",
+    answers: ["800", "25", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства smok novo 4?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства smok novo 4?",
+    answers: ["800", "25", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства smok novo 4?",
+    answers: ["800", "25", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства smok novo 4 mini?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства smok novo 4 mini?",
+    answers: ["900", "25", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства smok novo 4 mini?",
+    answers: ["900", "25", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства smok nfix?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства smok nfix?",
+    answers: ["700", "25", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства smok nfix?",
+    answers: ["700", "25", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства vaporesso barr?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства vaporesso barr?",
+    answers: ["350", "13", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства vaporesso barr?",
+    answers: ["350", "13", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства vaporesso zero?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя (непроливайка)"],
+    correctAnswer: 3
+  },
+  {
+    question: "Сколько mAh у устройства vaporesso zero?",
+    answers: ["650", "15", "нижняя (непроливайка)"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства vaporesso zero?",
+    answers: ["650", "15", "нижняя (непроливайка)"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства vaporesso zero 2?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя (непроливайка)"],
+    correctAnswer: 3
+  },
+  {
+    question: "Сколько mAh у устройства vaporesso zero 2?",
+    answers: ["800", "15", "нижняя (непроливайка)"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства vaporesso zero 2?",
+    answers: ["800", "15", "нижняя (непроливайка)"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства vaporesso xtra?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства vaporesso xtra?",
+    answers: ["900", "16", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства vaporesso xtra?",
+    answers: ["900", "16", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства vaporesso luxe Q?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько mAh у устройства vaporesso luxe Q?",
+    answers: ["1000", "16", "сверху на излом"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства vaporesso luxe Q?",
+    answers: ["1000", "16", "сверху на излом"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства vaporesso xros?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько mAh у устройства vaporesso xros?",
+    answers: ["800", "16", "сверху на излом"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства vaporesso xros?",
+    answers: ["800", "16", "сверху на излом"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства vaporesso xros 2?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько mAh у устройства vaporesso xros 2?",
+    answers: ["1000", "16", "сверху на излом"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства vaporesso xros 2?",
+    answers: ["1000", "16", "сверху на излом"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства vaporesso xros mini?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько mAh у устройства vaporesso xros mini?",
+    answers: ["1000", "16", "сверху на излом"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства vaporesso xros mini?",
+    answers: ["1000", "16", "сверху на излом"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства vaporesso xros nano?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько mAh у устройства vaporesso xros nano?",
+    answers: ["1000", "16", "сверху на излом"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства vaporesso xros nano?",
+    answers: ["1000", "16", "сверху на излом"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства vaporesso xros 3?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько mAh у устройства vaporesso xros 3?",
+    answers: ["1000", "16", "сверху на излом"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства vaporesso xros 3?",
+    answers: ["1000", "16", "сверху на излом"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства brusko minican?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 3
+  },
+  {
+    question: "Сколько mAh у устройства brusko minican?",
+    answers: ["350", "12-15", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства brusko minican?",
+    answers: ["350", "12-15", "нижняя"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства brusko minican 2?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 3
+  },
+  {
+    question: "Сколько mAh у устройства brusko minican 2?",
+    answers: ["400", "12-15", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства brusko minican 2?",
+    answers: ["400", "12-15", "нижняя"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства brusko minican+?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 3
+  },
+  {
+    question: "Сколько mAh у устройства brusko minican+?",
+    answers: ["850", "12-15", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства brusko minican+?",
+    answers: ["850", "12-15", "нижняя"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства brusko minican 3?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 3
+  },
+  {
+    question: "Сколько mAh у устройства brusko minican 3?",
+    answers: ["700", "12-15", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства brusko minican 3?",
+    answers: ["700", "12-15", "нижняя"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства brusko vilter?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 3
+  },
+  {
+    question: "Сколько mAh у устройства brusko vilter?",
+    answers: ["450", "15", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства brusko vilter?",
+    answers: ["450", "15", "нижняя"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства brusko favostix?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 3
+  },
+  {
+    question: "Сколько mAh у устройства brusko favostix?",
+    answers: ["1000", "30", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства brusko favostix?",
+    answers: ["1000", "30", "нижняя"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства brusko favostix mini?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 3
+  },
+  {
+    question: "Сколько mAh у устройства brusko favostix mini?",
+    answers: ["700", "12-18", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства brusko favostix mini?",
+    answers: ["700", "12-18", "нижняя"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства brusko feelin?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства brusko feelin?",
+    answers: ["1000", "22", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства brusko feelin?",
+    answers: ["1000", "22", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства brusko feelin mini?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 3
+  },
+  {
+    question: "Сколько mAh у устройства brusko feelin mini?",
+    answers: ["750", "18", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства brusko feelin mini?",
+    answers: ["750", "18", "нижняя"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства brusko micool?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 3
+  },
+  {
+    question: "Сколько mAh у устройства brusko micool?",
+    answers: ["500", "13", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства brusko micool?",
+    answers: ["500", "13", "нижняя"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства brusko flexus stik?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 3
+  },
+  {
+    question: "Сколько mAh у устройства brusko flexus stik?",
+    answers: ["1200", "12-18", "нижняя"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства brusko flexus stik?",
+    answers: ["1200", "18", "нижняя"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства brusko flexus Q?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства brusko flexus Q?",
+    answers: ["700", "12-18", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства brusko flexus Q?",
+    answers: ["700", "12-18", "боковая"],
+    correctAnswer: 1
+  },
+  {
+    question: "Какой тип заправки у устройства brusko flexus block?",
+    answers: ["сверху на излом", "сверху", "боковая", "нижняя"],
+    correctAnswer: 2
+  },
+  {
+    question: "Сколько mAh у устройства brusko flexus block?",
+    answers: ["1200", "18", "боковая"],
+    correctAnswer: 0
+  },
+  {
+    question: "Сколько Watt у устройства brusko flexus block?",
+    answers: ["1200", "18", "боковая"],
+    correctAnswer: 1
+  }
+];
+
+
+var currentQuestion = 0;
+    var correctAnswers = 0;
+
+    function displayQuestion() {
+      var questionContainer = document.getElementById("question-container");
+      questionContainer.innerHTML = "";
+
+      var questionElement = document.createElement("div");
+      questionElement.className = "question";
+
+      var questionTextElement = document.createElement("div");
+      questionTextElement.className = "question-text";
+      questionTextElement.innerHTML = questions[currentQuestion].question;
+
+      var answersElement = document.createElement("div");
+      answersElement.className = "answers";
+
+      for (var i = 0; i < questions[currentQuestion].answers.length; i++) {
+        var answerElement = document.createElement("div");
+        answerElement.className = "answer";
+        answerElement.innerHTML = questions[currentQuestion].answers[i];
+        answerElement.setAttribute("data-index", i);
+        answerElement.addEventListener("click", checkAnswer);
+        answersElement.appendChild(answerElement);
+      }
+
+      questionElement.appendChild(questionTextElement);
+      questionElement.appendChild(answersElement);
+      questionContainer.appendChild(questionElement);
+    }
+
+    function checkAnswer(event) {
+      var selectedIndex = parseInt(event.target.getAttribute("data-index"));
+      var correctAnswerIndex = questions[currentQuestion].correctAnswer;
+
+      var answerElements = document.getElementsByClassName("answer");
+      for (var i = 0; i < answerElements.length; i++) {
+        answerElements[i].classList.remove("correct", "incorrect");
+      }
+
+      if (selectedIndex === correctAnswerIndex) {
+        event.target.classList.add("correct");
+        correctAnswers++;
+      } else {
+        event.target.classList.add("incorrect");
+      }
+
+      currentQuestion++;
+
+      if (currentQuestion < questions.length) {
+        setTimeout(displayQuestion, 1000); // Пауза 1 секунда перед отображением следующего вопроса
+      } else {
+        setTimeout(showResult, 1000); // Пауза 1 секунда перед отображением результатов
+      }
+    }
+
+    function showResult() {
+      var questionContainer = document.getElementById("question-container");
+      var resultElement = document.getElementById("result");
+
+      questionContainer.innerHTML = "";
+      resultElement.innerHTML = "Вы ответили правильно на " + correctAnswers + " из " + questions.length + " вопросов.";
+    }
+
+    displayQuestion();
+  </script>
+</body>
+</html>
